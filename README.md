@@ -64,6 +64,14 @@ Senha: Laravel@2020!
 php artisan serve
 ```
 
+#### 7 - Criando novas entidades
+
+Adicione as suas classes utilizando o comando abaixo
+
+```
+php artisan perovano:defaults:create Entity1Name Entity2Name...
+```
+
 ## Documentação
 
 Para verificar as rotas disponíveis acesse a documentação [documentação](http://localhost:8000/doc).
