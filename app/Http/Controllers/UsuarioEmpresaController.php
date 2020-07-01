@@ -125,6 +125,7 @@ class UsuarioEmpresaController extends Controller
 	/**
 	 * Modificar
 	 * Esta rota faz alterações no usuário de uma empresa
+	 * @urlParam usuarioEmpresa required Id da empresa de usuário
 	 * @bodyParam ativo bool required Usuário está ativo na empresa
 	 * @authenticated
 	 * 

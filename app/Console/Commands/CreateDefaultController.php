@@ -68,6 +68,9 @@ class CreateDefaultController extends Command
             file_put_contents($file_name, "use App\\Contracts\\" . $class . "Contract;\n", FILE_APPEND);
             file_put_contents($file_name, "use App\\Models\\" . $class . ";\n", FILE_APPEND);
             file_put_contents($file_name, "use Illuminate\Http\Request;\n\n", FILE_APPEND);
+            file_put_contents($file_name, "/**\n", FILE_APPEND);
+            file_put_contents($file_name, "* @group $class\n", FILE_APPEND);
+            file_put_contents($file_name, "*/\n", FILE_APPEND);
             file_put_contents($file_name, "class " . $class . "Controller extends Controller\n", FILE_APPEND);
             file_put_contents($file_name, "{\n\n", FILE_APPEND);
 
@@ -104,6 +107,16 @@ class CreateDefaultController extends Command
              */
 
             file_put_contents($file_name, "\t/**\n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Listar \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Lista de $class \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @queryParam take Quantidade de registros que será retornado Ex: 20 \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @queryParam take Quantidade de registros que será retornado Ex: 20 \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @queryParam skip Quantidade de registros para saltar Ex: 20 \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @queryParam order Nome do campo para ordenar Ex: nome \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @queryParam orderDirection Direção da ordenação Ex: asc, desc \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @queryParam search Texto para ser utilizado como pesquisa entre os registros \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * \n", FILE_APPEND);
             file_put_contents($file_name, "\t * @return " . $class . "ResourceCollection\n", FILE_APPEND);
             file_put_contents($file_name, "\t */\n", FILE_APPEND);
             file_put_contents($file_name, "\tpublic function list()\n\t{\n", FILE_APPEND);
@@ -137,6 +150,12 @@ class CreateDefaultController extends Command
              */
 
             file_put_contents($file_name, "\t/**\n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Consultar \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Esta rota retorna um $class especifico \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @urlParam " . lcfirst($class) . " required Id do $class \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * \n", FILE_APPEND);
             file_put_contents($file_name, "\t * @param int \$id\n", FILE_APPEND);
             file_put_contents($file_name, "\t * @return " . $class . "Resource\n", FILE_APPEND);
             file_put_contents($file_name, "\t */\n", FILE_APPEND);
@@ -159,7 +178,12 @@ class CreateDefaultController extends Command
              * Open add method
              */
 
-            file_put_contents($file_name, "\n\n\t/**", FILE_APPEND);
+            file_put_contents($file_name, "\n\n\t/**\n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Adicionar \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Esta rota cria um novo $class \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * ", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param Add" . $class . "Request \$request", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @return \Illuminate\Http\JsonResponse", FILE_APPEND);
             file_put_contents($file_name, "\n\t */", FILE_APPEND);
@@ -183,7 +207,13 @@ class CreateDefaultController extends Command
              * Open update method
              */
 
-            file_put_contents($file_name, "\n\n\t/**", FILE_APPEND);
+            file_put_contents($file_name, "\n\n\t/**\n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Modificar \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Esta rota faz alterações no cadastro de $class \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @urlParam " . lcfirst($class) . " required Id do $class \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * ", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param \App\Models\\$class \$" . lcfirst($class) . "", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param Update" . $class . "Request \$request", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @return \Illuminate\Http\JsonResponse", FILE_APPEND);
@@ -205,7 +235,13 @@ class CreateDefaultController extends Command
             /**
              * Open delete method
              */
-            file_put_contents($file_name, "\n\n\t/**", FILE_APPEND);
+            file_put_contents($file_name, "\n\n\t/**\n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Excluir \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * Esta rota exclui o(s) registro(s) passado como parâmetro {" . lcfirst($class) . "} na url \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @urlParam " . lcfirst($class) . " required Ids que serão excluídos separados por virgula Ex: 1,20,55 \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
+            file_put_contents($file_name, "\t * ", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param \App\Models\\$class \$" . lcfirst($class) . "", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @return \Illuminate\Http\JsonResponse", FILE_APPEND);
             file_put_contents($file_name, "\n\t */", FILE_APPEND);
