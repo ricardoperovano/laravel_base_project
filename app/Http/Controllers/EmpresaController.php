@@ -125,6 +125,7 @@ class EmpresaController extends Controller
 	/**
 	 * Modificar
 	 * Esta rota faz alterações no cadastro da empresa
+	 * @urlParam empresa required Id da empresa
 	 * @bodyParam nome string required Nome da empresa
 	 * @bodyParam cnpj string Cnpj
 	 * @authenticated
