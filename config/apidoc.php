@@ -75,7 +75,7 @@ return [
         /*
          * The description for the exported Postman collection.
          */
-        'description' => null,
+        'description' => 'Api endpoints collection for Postman',
 
         /*
          * The "Auth" section that should appear in the postman collection. See the schema docs for more information:
