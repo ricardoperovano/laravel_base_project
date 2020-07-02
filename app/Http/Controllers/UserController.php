@@ -132,6 +132,7 @@ class UserController extends Controller
 	 * @bodyParam senha string Senha
 	 * @bodyParam confirmacao_senha string Confirmação de Senha
 	 * @bodyParam email string required Email
+	 * @urlParam user required Id do usuário
 	 * @authenticated
 	 * 
 	 * @param \App\Models\User $user
