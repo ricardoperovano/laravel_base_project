@@ -68,9 +68,6 @@ class CreateDefaultController extends Command
             file_put_contents($file_name, "use App\\Contracts\\" . $class . "Contract;\n", FILE_APPEND);
             file_put_contents($file_name, "use App\\Models\\" . $class . ";\n", FILE_APPEND);
             file_put_contents($file_name, "use Illuminate\Http\Request;\n\n", FILE_APPEND);
-            file_put_contents($file_name, "/**\n", FILE_APPEND);
-            file_put_contents($file_name, "* @group $class\n", FILE_APPEND);
-            file_put_contents($file_name, "*/\n", FILE_APPEND);
             file_put_contents($file_name, "class " . $class . "Controller extends Controller\n", FILE_APPEND);
             file_put_contents($file_name, "{\n\n", FILE_APPEND);
 
@@ -93,6 +90,15 @@ class CreateDefaultController extends Command
             file_put_contents($file_name, "\t\t */\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\$this->repository = \$" . lcfirst($class) . "Repository;\n\n", FILE_APPEND);
 
+            file_put_contents($file_name, "\t\t/** Fields to search*/\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\tif (\$this->search) {\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t\$search = \$this->search;\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t\$this->search = [\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t\t\"nome\"	=> \$search,\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t\t\"id\"	=> \$search,\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t];\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t}\n\n", FILE_APPEND);
+
             file_put_contents($file_name, "\t\t/**\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t * Especify fields to return.\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t * The Id field is automatically returned.\n", FILE_APPEND);
@@ -107,16 +113,6 @@ class CreateDefaultController extends Command
              */
 
             file_put_contents($file_name, "\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Listar \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Lista de $class \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @queryParam take Quantidade de registros que será retornado Ex: 20 \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @queryParam take Quantidade de registros que será retornado Ex: 20 \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @queryParam skip Quantidade de registros para saltar Ex: 20 \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @queryParam order Nome do campo para ordenar Ex: nome \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @queryParam orderDirection Direção da ordenação Ex: asc, desc \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @queryParam search Texto para ser utilizado como pesquisa entre os registros \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * \n", FILE_APPEND);
             file_put_contents($file_name, "\t * @return " . $class . "ResourceCollection\n", FILE_APPEND);
             file_put_contents($file_name, "\t */\n", FILE_APPEND);
             file_put_contents($file_name, "\tpublic function list()\n\t{\n", FILE_APPEND);
@@ -125,13 +121,18 @@ class CreateDefaultController extends Command
             /**
              * List method scope
              */
-            file_put_contents($file_name, "\t\t\$resource = \$this->repository->list$class(\n\t\t\t\$this->skip,\n \t\t\t\$this->take,\n \t\t\t\$this->order,\n \t\t\t\$this->orderDirection,\n \t\t\t\$this->relationships,\n \t\t\tarray_merge(['empresa_id' => \$this->currentCompany()->id], \$this->filter),\n \t\t\tarray('*'),\n \t\t\t\$this->search\n\t\t);\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$resource = \$this->repository->list$class(\n\t\t\t\$this->skip,\n \t\t\t\$this->take,\n \t\t\t\$this->order,\n \t\t\t\$this->orderDirection,\n \t\t\t\$this->relationships,\n \t\t\tarray_merge(['empresa_id' => \$this->empresaAtual()->id], \$this->filter),\n \t\t\tarray('*'),\n \t\t\t\$this->search\n\t\t);\n\n", FILE_APPEND);
 
-            file_put_contents($file_name, "\t\t\$total_records = \$this->currentCompany(['" . lcfirst($class) . "s'])->" . lcfirst($class) . "s->count();\n", FILE_APPEND);
-            file_put_contents($file_name, "\t\t\$total_filtered = \$this->search ? \$resource->count() : \$total_records;\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$empresa = \$this->empresaAtual();\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$records = \$empresa->" . lcfirst($class) . "s();\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$total_filtered = \$this->search ? \$records->where(function (\$q) {\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\tforeach (\$this->search as \$key => \$value) {\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t\t\$q->orWhere(\$key, \"like\", \"%\$value%\");\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t}\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t})->count() : \$records->count();\n\n", FILE_APPEND);
 
             file_put_contents($file_name, "\t\t\$data = [\n", FILE_APPEND);
-            file_put_contents($file_name, "\t\t\t'total_records'    => \$total_records,\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\t'total_records'    => \$records->count(),\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\t'total_filtered'   => \$total_filtered,\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\t'order'            => [\n\t\t\t\t'column' \t=> \$this->order, \n\t\t\t\t'direction' => \$this->orderDirection\n\t\t\t],\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\t'data'             => new " . $class . "ResourceCollection(\$resource),\n", FILE_APPEND);
@@ -150,12 +151,6 @@ class CreateDefaultController extends Command
              */
 
             file_put_contents($file_name, "\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Consultar \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Esta rota retorna um $class especifico \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @urlParam " . lcfirst($class) . " required Id do $class \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * \n", FILE_APPEND);
             file_put_contents($file_name, "\t * @param int \$id\n", FILE_APPEND);
             file_put_contents($file_name, "\t * @return " . $class . "Resource\n", FILE_APPEND);
             file_put_contents($file_name, "\t */\n", FILE_APPEND);
@@ -178,12 +173,7 @@ class CreateDefaultController extends Command
              * Open add method
              */
 
-            file_put_contents($file_name, "\n\n\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Adicionar \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Esta rota cria um novo $class \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * ", FILE_APPEND);
+            file_put_contents($file_name, "\n\n\t/**", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param Add" . $class . "Request \$request", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @return \Illuminate\Http\JsonResponse", FILE_APPEND);
             file_put_contents($file_name, "\n\t */", FILE_APPEND);
@@ -193,7 +183,7 @@ class CreateDefaultController extends Command
              * Add method scope
              */
             file_put_contents($file_name, "\t\t\$" . lcfirst($class) . " = \$this->repository->create$class(\n", FILE_APPEND);
-            file_put_contents($file_name, "\t\t\tarray_merge(\$request->all(), [\n\t\t\t\t'empresa_id' => \$this->currentCompany()->id\n\t\t\t])\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\tarray_merge(\$request->all(), [\n\t\t\t\t'empresa_id' => \$this->empresaAtual()->id\n\t\t\t])\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t);\n\n", FILE_APPEND);
             file_put_contents($file_name, "\t\treturn \$this->responseJson(false, 200, \"Registro Incluído com Sucesso\", new " . $class . "Resource(\$" . lcfirst($class) . "));\n", FILE_APPEND);
 
@@ -207,13 +197,7 @@ class CreateDefaultController extends Command
              * Open update method
              */
 
-            file_put_contents($file_name, "\n\n\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Modificar \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Esta rota faz alterações no cadastro de $class \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @urlParam " . lcfirst($class) . " required Id do $class \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * ", FILE_APPEND);
+            file_put_contents($file_name, "\n\n\t/**", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param \App\Models\\$class \$" . lcfirst($class) . "", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param Update" . $class . "Request \$request", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @return \Illuminate\Http\JsonResponse", FILE_APPEND);
@@ -235,13 +219,7 @@ class CreateDefaultController extends Command
             /**
              * Open delete method
              */
-            file_put_contents($file_name, "\n\n\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Excluir \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * Esta rota exclui o(s) registro(s) passado como parâmetro {" . lcfirst($class) . "} na url \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @urlParam " . lcfirst($class) . " required Ids que serão excluídos separados por virgula Ex: 1,20,55 \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @authenticated \n", FILE_APPEND);
-            file_put_contents($file_name, "\t * ", FILE_APPEND);
+            file_put_contents($file_name, "\n\n\t/**", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @param \App\Models\\$class \$" . lcfirst($class) . "", FILE_APPEND);
             file_put_contents($file_name, "\n\t * @return \Illuminate\Http\JsonResponse", FILE_APPEND);
             file_put_contents($file_name, "\n\t */", FILE_APPEND);
