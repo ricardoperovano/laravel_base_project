@@ -79,7 +79,7 @@ class CreateInterface extends Command
             file_put_contents($file_name, "\t * @param string \$search\n", FILE_APPEND);
             file_put_contents($file_name, "\t * @return mixed\n", FILE_APPEND);
             file_put_contents($file_name, "\t */\n", FILE_APPEND);
-            file_put_contents($file_name, "\tpublic function list$class(int \$skip = 0, int \$take = 10, string \$orderBy = 'id', string \$orderDirection = 'asc', array \$relationships = [], array \$filter = [], \$columns = array('*'), \$search = null);\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\tpublic function list$class(int \$skip = 0, int \$take = 10, string \$orderBy = 'id', string \$orderDirection = 'asc', array \$relationships = [], array \$filter = [], \$columns = array('*'), \$search = []);\n\n", FILE_APPEND);
 
             /**
              * Open get method
