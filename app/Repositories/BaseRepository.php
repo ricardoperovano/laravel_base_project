@@ -56,7 +56,7 @@ class BaseRepository implements BaseContract
      * @param array $search
      * @return mixed
      */
-    public function list(int $skip = 0, int $take = 10, string $orderBy = 'id', string $orderDirection = 'asc', array $relationship = [], array $filter = [], $columns = array('*'), $search = null)
+    public function list(int $skip = 0, int $take = 10, string $orderBy = 'id', string $orderDirection = 'asc', array $relationship = [], array $filter = [], $columns = array('*'), $search = null, $join = null)
     {
         return $this->model->with($relationship)->when($search, function ($query, $search) {
             foreach ($search as $key => $value) {
@@ -64,7 +64,17 @@ class BaseRepository implements BaseContract
             }
 
             return $query;
-        })->where($filter)->skip($skip)->take($take)->orderBy($orderBy, $orderDirection)->get($columns);
+        })
+            ->when($join, function ($query, $join) {
+                foreach ($join as $table => $foreing) {
+                    $query->join($table, $table . ".id", "=", $foreing);
+                }
+            })
+            ->where($filter)
+            ->skip($skip)
+            ->take($take)
+            ->orderBy($orderBy, $orderDirection)
+            ->get($columns);
     }
     /**
      * @param int $id

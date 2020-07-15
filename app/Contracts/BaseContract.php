@@ -35,7 +35,7 @@ interface BaseContract
      * @param string $search
      * @return mixed
      */
-    public function list(int $skip = 0, int $take = 10, string $orderBy = 'id', string $orderDirection = 'asc', array $relationship = [], array $filter = [], $columns = array('*'), $search = null);
+    public function list(int $skip = 0, int $take = 10, string $orderBy = 'id', string $orderDirection = 'asc', array $relationship = [], array $filter = [], $columns = array('*'), $search = null, $join = null);
     /**
      * Find one by ID
      * @param int $id

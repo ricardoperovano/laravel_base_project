@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Utils\Helper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
@@ -90,6 +91,9 @@ class CreateDefaultController extends Command
             file_put_contents($file_name, "\t\t */\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\$this->repository = \$" . lcfirst($class) . "Repository;\n\n", FILE_APPEND);
 
+            file_put_contents($file_name, "\t\t/** Relations to join Ex: ['colaboradores' => 'medicos.colaborador_id']*/\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$this->join = [];\n\n", FILE_APPEND);
+
             file_put_contents($file_name, "\t\t/** Fields to search*/\n", FILE_APPEND);
             file_put_contents($file_name, "\t\tif (\$this->search) {\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\t\$search = \$this->search;\n", FILE_APPEND);
@@ -121,7 +125,7 @@ class CreateDefaultController extends Command
             /**
              * List method scope
              */
-            file_put_contents($file_name, "\t\t\$resource = \$this->repository->list$class(\n\t\t\t\$this->skip,\n \t\t\t\$this->take,\n \t\t\t\$this->order,\n \t\t\t\$this->orderDirection,\n \t\t\t\$this->relationships,\n \t\t\tarray_merge(['empresa_id' => \$this->empresaAtual()->id], \$this->filter),\n \t\t\tarray('*'),\n \t\t\t\$this->search\n\t\t);\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$resource = \$this->repository->list$class(\n\t\t\t\$this->skip,\n \t\t\t\$this->take,\n \t\t\t\"" . Helper::camelCaseToUnderscore($class) . "s.\" . \$this->order,\n \t\t\t\$this->orderDirection,\n \t\t\t\$this->relationships,\n \t\t\tarray_merge(['empresa_id' => \$this->empresaAtual()->id], \$this->filter),\n \t\t\tarray('*'),\n \t\t\t\$this->search\n\t\t,\n \t\t\t\$this->join\n\t\t);\n\n", FILE_APPEND);
 
             file_put_contents($file_name, "\t\t\$empresa = \$this->empresaAtual();\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\$records = \$empresa->" . lcfirst($class) . "s();\n\n", FILE_APPEND);

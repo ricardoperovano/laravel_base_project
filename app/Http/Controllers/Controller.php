@@ -46,6 +46,11 @@ class Controller extends BaseController
     /**
      * @var
      */
+    public $join = [];
+
+    /**
+     * @var
+     */
     public $search = null;
 
     /**

@@ -97,12 +97,12 @@ class CreateRepository extends Command
             file_put_contents($file_name, "\t * @param string \$search\n", FILE_APPEND);
             file_put_contents($file_name, "\t * @return mixed\n", FILE_APPEND);
             file_put_contents($file_name, "\t */\n", FILE_APPEND);
-            file_put_contents($file_name, "\tpublic function list$class(int \$skip = 0, int \$take = 10, string \$orderBy = 'id', string \$orderDirection = 'asc', array \$relationships = [], array \$filter = [], \$columns = array('*'), \$search = [])\n\t{\n", FILE_APPEND);
+            file_put_contents($file_name, "\tpublic function list$class(int \$skip = 0, int \$take = 10, string \$orderBy = 'id', string \$orderDirection = 'asc', array \$relationships = [], array \$filter = [], \$columns = array('*'), \$search = [], \$join = null)\n\t{\n", FILE_APPEND);
 
             /**
              * List method scope
              */
-            file_put_contents($file_name, "\t\treturn \$this->list(\$skip, \$take, \$orderBy, \$orderDirection, \$relationships, \$filter, \$columns, \$search);\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\treturn \$this->list(\$skip, \$take, \$orderBy, \$orderDirection, \$relationships, \$filter, \$columns, \$search, \$join);\n", FILE_APPEND);
 
             /**
              * Close list method

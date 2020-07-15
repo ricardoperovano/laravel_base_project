@@ -65,7 +65,8 @@ class LogController extends Controller
 			$this->relationships,
 			array_merge(['empresa_id' => $this->currentCompany()->id], $this->filter),
 			array('*'),
-			$this->search
+			$this->search,
+			$this->join
 		);
 
 		$total_records = $this->currentCompany(['logs'])->logs->count();
