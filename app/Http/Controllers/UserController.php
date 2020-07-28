@@ -57,7 +57,7 @@ class UserController extends Controller
 		 */
 		if (!$this->currentUser()->allowed('listar_')) return $this->notAllowedResponse();
 
-		$resource = $this->repository->listUser(
+		$resource = $this->repository->list(
 			$this->skip,
 			$this->take,
 			$this->order,
@@ -116,7 +116,7 @@ class UserController extends Controller
 	 */
 	public function create(AddUserRequest $request)
 	{
-		$user = $this->repository->createUser(
+		$user = $this->repository->create(
 			array_merge($request->all(), [
 				'empresa_id' => $this->currentCompany()->id
 			])
@@ -141,7 +141,7 @@ class UserController extends Controller
 	 */
 	public function update(User $user, UpdateUserRequest $request)
 	{
-		$this->repository->updateUser(array_merge(request()->all(), ["id" => $user->id]));
+		$this->repository->update(array_merge(request()->all(), $user->id);
 
 		return $this->responseJson(false, 200, "Registro Atualizado com Sucesso", new UserResource($user->fresh()));
 	}
@@ -160,7 +160,7 @@ class UserController extends Controller
 		$ids = explode(',', $user);
 
 		foreach ($ids as $id) {
-			$this->repository->deleteUser((int) $id);
+			$this->repository->delete((int) $id);
 		}
 
 		return $this->responseJson(false, 200, "Registro Excluído com Sucesso");

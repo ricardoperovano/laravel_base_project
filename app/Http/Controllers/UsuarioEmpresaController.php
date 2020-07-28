@@ -57,7 +57,7 @@ class UsuarioEmpresaController extends Controller
 		 */
 		if (!$this->currentUser()->allowed('listar_')) return $this->notAllowedResponse();
 
-		$resource = $this->repository->listUsuarioEmpresa(
+		$resource = $this->repository->list(
 			$this->skip,
 			$this->take,
 			$this->order,
@@ -113,7 +113,7 @@ class UsuarioEmpresaController extends Controller
 	 */
 	public function create(AddUsuarioEmpresaRequest $request)
 	{
-		$usuarioEmpresa = $this->repository->createUsuarioEmpresa(
+		$usuarioEmpresa = $this->repository->create(
 			array_merge($request->all(), [
 				'empresa_id' => $this->currentCompany()->id
 			])
@@ -135,7 +135,7 @@ class UsuarioEmpresaController extends Controller
 	 */
 	public function update(UsuarioEmpresa $usuarioEmpresa, UpdateUsuarioEmpresaRequest $request)
 	{
-		$this->repository->updateUsuarioEmpresa(array_merge(request()->all(), ["id" => $usuarioEmpresa->id]));
+		$this->repository->update(array_merge(request()->all()), $usuarioEmpresa->id);
 
 		return $this->responseJson(false, 200, "Registro Atualizado com Sucesso", new UsuarioEmpresaResource($usuarioEmpresa->fresh()));
 	}
@@ -153,7 +153,7 @@ class UsuarioEmpresaController extends Controller
 		$ids = explode(',', $usuarioEmpresa);
 
 		foreach ($ids as $id) {
-			$this->repository->deleteUsuarioEmpresa((int) $id);
+			$this->repository->delete((int) $id);
 		}
 
 		return $this->responseJson(false, 200, "Registro Excluído com Sucesso");

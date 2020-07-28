@@ -57,7 +57,7 @@ class LogController extends Controller
 		 */
 		if (!$this->currentUser()->allowed('listar_')) return $this->notAllowedResponse();
 
-		$resource = $this->repository->listLog(
+		$resource = $this->repository->list(
 			$this->skip,
 			$this->take,
 			$this->order,
@@ -119,7 +119,7 @@ class LogController extends Controller
 	 */
 	public function create(AddLogRequest $request)
 	{
-		$log = $this->repository->createLog(
+		$log = $this->repository->create(
 			array_merge($request->all(), [
 				'empresa_id' => $this->currentCompany()->id
 			])

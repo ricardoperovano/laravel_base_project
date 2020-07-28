@@ -64,61 +64,6 @@ class CreateInterface extends Command
 
             file_put_contents($file_name, "interface " . $class . "Contract{\n\n", FILE_APPEND);
 
-            /**
-             * Open list method
-             */
-
-            file_put_contents($file_name, "\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param int \$skip\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param int \$take\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param string \$orderBy\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param string \$orderDirection\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param array \$relationships\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param array \$filter\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param array \$columns\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param string \$search\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @return mixed\n", FILE_APPEND);
-            file_put_contents($file_name, "\t */\n", FILE_APPEND);
-            file_put_contents($file_name, "\tpublic function list$class(int \$skip = 0, int \$take = 10, string \$orderBy = 'id', string \$orderDirection = 'asc', array \$relationships = [], array \$filter = [], \$columns = array('*'), \$search = [], \$join = null);\n\n", FILE_APPEND);
-
-            /**
-             * Open get method
-             */
-
-            file_put_contents($file_name, "\t/**\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param int \$id\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @param array \$relationships\n", FILE_APPEND);
-            file_put_contents($file_name, "\t * @return $class|mixed\n", FILE_APPEND);
-            file_put_contents($file_name, "\t */\n", FILE_APPEND);
-            file_put_contents($file_name, "\tpublic function find" . $class . "ById(int \$id, array \$relationships = []);\n\n", FILE_APPEND);
-
-            /**
-             * Open add method
-             */
-            file_put_contents($file_name, "\t/**", FILE_APPEND);
-            file_put_contents($file_name, "\n\t * @param array \$params", FILE_APPEND);
-            file_put_contents($file_name, "\n\t * @return $class|mixed", FILE_APPEND);
-            file_put_contents($file_name, "\n\t */", FILE_APPEND);
-            file_put_contents($file_name, "\n\tpublic function create$class(array \$params);\n\n", FILE_APPEND);
-
-            /**
-             * Open update method
-             */
-            file_put_contents($file_name, "\t/**", FILE_APPEND);
-            file_put_contents($file_name, "\n\t * @param array \$params", FILE_APPEND);
-            file_put_contents($file_name, "\n\t * @return mixed", FILE_APPEND);
-            file_put_contents($file_name, "\n\t */", FILE_APPEND);
-            file_put_contents($file_name, "\n\tpublic function update$class(array \$params);\n\n", FILE_APPEND);
-
-            /**
-             * Open delete method
-             */
-            file_put_contents($file_name, "\t/**", FILE_APPEND);
-            file_put_contents($file_name, "\n\t * @param \$id", FILE_APPEND);
-            file_put_contents($file_name, "\n\t * @return bool|mixed", FILE_APPEND);
-            file_put_contents($file_name, "\n\t */", FILE_APPEND);
-            file_put_contents($file_name, "\n\tpublic function delete$class(\$id);\n\n", FILE_APPEND);
-
             file_put_contents($file_name, "}", FILE_APPEND);
         }
     }

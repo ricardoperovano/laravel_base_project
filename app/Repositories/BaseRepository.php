@@ -5,26 +5,29 @@ namespace App\Repositories;
 use App\Contracts\BaseContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
 
 /**
  * Class BaseRepository
  *
  * @package \App\Repositories
  */
-class BaseRepository implements BaseContract
+abstract class BaseRepository implements BaseContract
 {
     /**
      * @var Model
      */
     protected $model;
-    /**
-     * BaseRepository constructor.
-     * @param Model $model
-     */
-    public function __construct(Model $model)
+
+    protected function resolveModel()
     {
-        $this->model = $model;
+        return app($this->model);
+    }
+
+    public function __construct()
+    {
+        $this->model = $this->resolveModel();
     }
     /**
      * @param array $attributes
@@ -32,7 +35,11 @@ class BaseRepository implements BaseContract
      */
     public function create(array $attributes)
     {
-        return $this->model->create($attributes);
+        try {
+            return $this->model->create($attributes);
+        } catch (QueryException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
     }
     /**
      * @param array $attributes
@@ -41,7 +48,11 @@ class BaseRepository implements BaseContract
      */
     public function update(array $attributes, int $id): bool
     {
-        return $this->find($id)->update($attributes);
+        try {
+            return $this->findOneOrFail($id)->update($attributes);
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e);
+        }
     }
     /**
      * Return list model rows
@@ -56,7 +67,7 @@ class BaseRepository implements BaseContract
      * @param array $search
      * @return mixed
      */
-    public function list(int $skip = 0, int $take = 10, string $orderBy = 'id', string $orderDirection = 'asc', array $relationship = [], array $filter = [], $columns = array('*'), $search = null, $join = null)
+    public function list(int $skip = 0, int $take = 10, string $orderBy = 'id', string $orderDirection = 'asc', array $relationship = [], array $filter = [], $columns = array('*'), $search = [], $join = null)
     {
         return $this->model->with($relationship)->when($search, function ($query, $search) {
             foreach ($search as $key => $value) {
@@ -118,12 +129,17 @@ class BaseRepository implements BaseContract
     {
         return $this->model->where($data)->firstOrFail();
     }
+
     /**
      * @param int $id
      * @return bool
      */
     public function delete(int $id): bool
     {
-        return $this->model->find($id)->delete();
+        try {
+            return $this->findOneOrFail($id)->delete();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e);
+        }
     }
 }
