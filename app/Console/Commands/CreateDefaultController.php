@@ -125,7 +125,7 @@ class CreateDefaultController extends Command
             /**
              * List method scope
              */
-            file_put_contents($file_name, "\t\t\$resource = \$this->repository->list$class(\n\t\t\t\$this->skip,\n \t\t\t\$this->take,\n \t\t\t\"" . Helper::camelCaseToUnderscore($class) . "s.\" . \$this->order,\n \t\t\t\$this->orderDirection,\n \t\t\t\$this->relationships,\n \t\t\tarray_merge(['empresa_id' => \$this->empresaAtual()->id], \$this->filter),\n \t\t\tarray('*'),\n \t\t\t\$this->search\n\t\t,\n \t\t\t\$this->join\n\t\t);\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$resource = \$this->repository->list(\n\t\t\t\$this->skip,\n \t\t\t\$this->take,\n \t\t\t\"" . Helper::camelCaseToUnderscore($class) . "s.\" . \$this->order,\n \t\t\t\$this->orderDirection,\n \t\t\t\$this->relationships,\n \t\t\tarray_merge(['empresa_id' => \$this->empresaAtual()->id], \$this->filter),\n \t\t\tarray('*'),\n \t\t\t\$this->search\n\t\t,\n \t\t\t\$this->join\n\t\t);\n\n", FILE_APPEND);
 
             file_put_contents($file_name, "\t\t\$empresa = \$this->empresaAtual();\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\$records = \$empresa->" . lcfirst($class) . "s();\n\n", FILE_APPEND);
@@ -164,7 +164,7 @@ class CreateDefaultController extends Command
             /**
              * Get method scope
              */
-            file_put_contents($file_name, "\t\t\$data = \$this->repository->find$class" . "ById(\$id); \n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$data = \$this->repository->find(\$id); \n\n", FILE_APPEND);
             file_put_contents($file_name, "\t\treturn \$this->responseJson(false, 200, \"\", new " . $class . "Resource(\$data));\n", FILE_APPEND);
 
             /**
@@ -186,7 +186,7 @@ class CreateDefaultController extends Command
             /**
              * Add method scope
              */
-            file_put_contents($file_name, "\t\t\$" . lcfirst($class) . " = \$this->repository->create$class(\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$" . lcfirst($class) . " = \$this->repository->create(\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t\tarray_merge(\$request->all(), [\n\t\t\t\t'empresa_id' => \$this->empresaAtual()->id\n\t\t\t])\n", FILE_APPEND);
             file_put_contents($file_name, "\t\t);\n\n", FILE_APPEND);
             file_put_contents($file_name, "\t\treturn \$this->responseJson(false, 200, \"Registro Incluído com Sucesso\", new " . $class . "Resource(\$" . lcfirst($class) . "));\n", FILE_APPEND);
@@ -211,7 +211,7 @@ class CreateDefaultController extends Command
             /**
              * Update method scope
              */
-            file_put_contents($file_name, "\t\t\$this->repository->update$class(array_merge(request()->all(), [\"id\" => \$" . lcfirst($class) . "->id]));\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$this->repository->update(array_merge(request()->all()), \$" . lcfirst($class) . "->id);\n\n", FILE_APPEND);
             file_put_contents($file_name, "\t\treturn \$this->responseJson(false, 200, \"Registro Atualizado com Sucesso\", new " . $class . "Resource(\$" . lcfirst($class) . "->fresh()));\n", FILE_APPEND);
 
             /**
@@ -232,7 +232,7 @@ class CreateDefaultController extends Command
             /**
              * Delete method scope
              */
-            file_put_contents($file_name, "\t\t\$this->repository->delete$class(\$" . lcfirst($class) . "->id);\n\n", FILE_APPEND);
+            file_put_contents($file_name, "\t\t\$this->repository->delete(\$" . lcfirst($class) . "->id);\n\n", FILE_APPEND);
 
             file_put_contents($file_name, "\t\treturn \$this->responseJson(false, 204, \"Registro Excluído com Sucesso\");\n", FILE_APPEND);
 
